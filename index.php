@@ -203,7 +203,7 @@ $loginTime = $isLoggedIn ? ($_SESSION['login_time'] ?? 'Vừa xong') : null;
             <span class="dot"></span>
             CI/CD Deployment Hoạt Động
         </div>
-        <h1>Test CI/CD PHP Dashboard</h1>
+        <h1>Test CI/CD PHP update lần số 1</h1>
         <p class="desc">Trang web được tự động deploy qua GitHub Actions &amp; SSH lên VPS.</p>
         
         <!-- Khối trạng thái đăng nhập -->
@@ -242,7 +242,7 @@ $loginTime = $isLoggedIn ? ($_SESSION['login_time'] ?? 'Vừa xong') : null;
             </div>
             <div class="info-row">
                 <span class="label">Phiên bản code:</span>
-                <span class="value">v1.1.0-login</span>
+                <span class="value">v1.1.0-login update code lần 1</span>
             </div>
         </div>
     </div>

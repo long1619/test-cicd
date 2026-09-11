@@ -158,10 +158,35 @@ GitHub Actions cần các thông số kết nối vào VPS nhưng không đượ
 | Tên Secret | Ý Nghĩa / Giá Trị Mẫu |
 | :--- | :--- |
 | `VPS_HOST` | Địa chỉ IP Public của VPS (Ví dụ: `103.123.45.67`) |
-| `VPS_USERNAME` | User SSH bạn dùng (Ví dụ: `root` hoặc `ubuntu`) |
-| `VPS_SSH_KEY` | Toàn bộ nội dung file Private Key lấy ở **bước 2.2** (`cat ~/.ssh/github_actions_id`) |
-| `VPS_PORT` | Cổng SSH của VPS (Thường là `22`) |
-| `VPS_TARGET_DIR` | Đường dẫn thư mục code trên VPS: `/var/www/test-cicd` |
+| `VPS_USERNAME` | User SSH bạn dùng trên VPS (Ví dụ: `root` hoặc `ubuntu`) |
+| `VPS_SSH_KEY` | Toàn bộ nội dung **Private Key** bí mật (xem chi tiết cách lấy bên dưới) |
+| `VPS_PORT` | Cổng SSH của VPS (Mặc định là `22`) |
+| `VPS_TARGET_DIR` | Đường dẫn tuyệt đối đến thư mục code trên VPS: `/var/www/test-cicd` |
+
+> [!IMPORTANT]
+> ### Hướng dẫn chi tiết cách lấy `VPS_SSH_KEY`:
+> 1. **Bản chất**: Đây là **Private Key (Chìa khóa bí mật)**, tuyệt đối **KHÔNG** dùng file `.pub` (Public Key).
+> 2. **Lệnh in Private Key trên VPS**:
+>    - Nếu bạn tạo key theo bước 2.2:
+>      ```bash
+>      cat ~/.ssh/github_actions_id
+>      ```
+>    - Nếu bạn tạo key mặc định (`ssh-keygen -t ed25519`):
+>      ```bash
+>      cat ~/.ssh/id_ed25519
+>      ```
+> 3. **Quy tắc Copy**: Bạn phải copy **toàn bộ nội dung**, bao gồm cả dòng đầu và dòng cuối:
+>    ```text
+>    -----BEGIN OPENSSH PRIVATE KEY-----
+>    ... (toàn bộ các dòng ký tự ở giữa) ...
+>    -----END OPENSSH PRIVATE KEY-----
+>    ```
+> 4. **Điều kiện để VPS nhận chìa khóa**: Trước đó trên VPS, bạn phải đảm bảo đã đưa Public Key tương ứng vào danh sách ủy quyền:
+>    ```bash
+>    cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
+>    chmod 600 ~/.ssh/authorized_keys
+>    ```
+
 
 ---
 
