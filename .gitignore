@@ -1,0 +1,17 @@
+# Composer
+/vendor/
+composer.phar
+composer.lock
+
+# Environment & Sensitive configs
+.env
+.env.local
+.env.*.local
+
+# Logs and databases
+*.log
+*.sqlite
+
+# OS generated files
+.DS_Store
+Thumbs.db

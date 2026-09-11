@@ -1,0 +1,55 @@
+name: Deploy PHP to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to VPS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Kiểm tra cú pháp PHP (Lint Check)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      - run: |
+          find . -name "*.php" -not -path "./vendor/*" -exec php -l {} +
+
+      - name: Deploy qua SSH lên VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            echo "🚀 Bắt đầu quá trình deploy..."
+            
+            # Di chuyển vào thư mục dự án trên VPS
+            cd ${{ secrets.VPS_TARGET_DIR }} || exit 1
+            
+            # Kéo code mới nhất về từ GitHub
+            echo "📥 Kéo code từ branch main..."
+            git reset --hard HEAD
+            git pull origin main
+            
+            # Cài đặt Composer nếu có composer.json (bỏ comment nếu cần)
+            # if [ -f "composer.json" ]; then
+            #   echo "📦 Cập nhật composer packages..."
+            #   composer install --no-dev --optimize-autoloader
+            # fi
+            
+            # Phân quyền lại thư mục cho webserver (thường là www-data hoặc nginx)
+            # sudo chown -R www-data:www-data .
+            # sudo chmod -R 755 .
+            
+            # Reload PHP-FPM nếu cần (ví dụ php8.2-fpm)
+            # sudo systemctl reload php8.2-fpm
+            
+            echo "✅ Deploy hoàn tất thành công!"
